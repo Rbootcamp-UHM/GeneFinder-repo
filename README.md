@@ -1,7 +1,7 @@
 # HW4: The making of GENE FINDER
 ## String Matching, More Index/Subsetting Practice, Bioinformatics, and Input/Output
 ## A collaborative project
-## Due by  by midnight
+## Due no later than midnight, Friday Jan 31 (decide as a team)
 
 # R Task 
 
@@ -84,7 +84,7 @@ From within R (make sure the .Rmd file is in your R working directory):
 
 Cloning the repository. From your Rclass directory in your CMD or Terminal window:
    ```
-    git clone https://github.com/Rbootcamp-UHM/SquareRoots-repo.git
+    git clone https://github.com/Rbootcamp-UHM/GeneFinder-repo.git
    ```
 Check the status of your branches:
    ```
