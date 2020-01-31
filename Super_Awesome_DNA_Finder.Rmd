@@ -1,0 +1,454 @@
+---
+title: "Super Awesome DNA Finder"
+author: "Ethan Hill, Claire Fraser, Izzy Gaw, and Kira Webster"
+data: "2020-01-31"
+output: html_document
+---
+
+# Getting the DNA into R:
+```{r}
+dna <- read.csv("sampleDNA.csv")
+dna <- as.vector(dna$Nucleotides)
+
+pos <- cbind(rep(c(1,2,3), 167))
+pos <- c(pos[1:500])
+
+pos_dna <- data.frame(dna, pos)
+```
+
+# Reading Frames
+## Open Reading Frame 1
+### Finding all start codons in Open Reading Frame 1
+Starting with open reading frame (ORF) 1, we created a function to find the start codons in a 500 base pair sequence. It begins by looking for an A nucleotide. Once an A is located, it checks if there is a T following it. If a T is found, it sees if a G is following it. We then see which of the A's originally located are followed by the TG pair, which is labeled start_pos. We then determine where in the DNA the ATG triplet occurs. 
+
+### Finding all stop codons in Open Reading Frame 1
+The next few blocks find all of the stop codons in ORF1. We start all three stop codon locations by identifying all Ts. In the first two blocks, we follow that by finding As. Then, only in the first block we look lastly for As. Once we have located a TAA triplet, we name this stop1_pos. Using the same method previously described, the remaining two blocks look for stop triplets TAG and TGA, and name them stop2_pos and stop3_pos, respectively. 
+
+### Finding the sequence
+Now that we have all of the start and stop triplets located, we can take the first of all four codons of the DNA in this reading frame and remove any NA values. We then combine these four triplets and rename it seee.
+
+```{r}
+#orf1 <- function(dna=dna, pos=pos_dna) {
+#  i <- which(c(pos_dna$dna =="A" & pos_dna$pos == 1))
+#  i
+#  a <- dna[i+1] == "T"
+#  b <- dna[i+2] == "G" 
+#  start_pos <- a & b 
+#  start_pos <- i[a & b] 
+#  start_pos
+#  
+#  j <- which(c(pos_dna$dna =="T" & pos_dna$pos == 1))
+#  d <- dna[j+1] == "A"
+#  e <- dna[j+2] == "A"
+#  stop1_pos <- d & e
+#  stop1_pos <- j[d & e]
+#  stop1_pos
+#  
+#  jj <- which(c(pos_dna$dna =="T" & pos_dna$pos == 1))
+#  dd <- dna[jj+1] == "A"
+#  ee <- dna[jj+2] == "G"
+#  stop2_pos <- jj[dd & ee] 
+#  stop2_pos
+#  
+#  jjj <- which(c(pos_dna$dna =="T" & pos_dna$pos == 1))
+#  ddd <- dna[jjj+1] == "G"
+#  eee <- dna[jjj+2] == "A"
+#  stop3_pos <- jjj[ddd & eee] 
+#  stop3_pos
+#  
+#  start1 <- min(start_pos, na.rm=T)
+#  end1 <- min(stop1_pos, na.rm=T)
+#  end2 <- min(stop2_pos, na.rm=T)
+#  end3 <- min(stop3_pos, na.rm=T)
+#  
+#  seee <- c(start1, end1, end2, end3)
+#  seee[which(!is.finite(seee))] <- 0
+#  return(seee)
+#}
+```
+
+## Open Reading Frame 2
+Using the methods described above for open reading frame 1, we repeated this to find the start and stop codons for open reading frame 2. 
+```{r}
+#orf2 <- function(dna=dna, pos=pos_dna) {
+#  i <- which(c(pos_dna$dna =="A" & pos_dna$pos == 2))
+#  i
+#  a <- dna[i+1] == "T"
+#  b <- dna[i+2] == "G" 
+#  start_pos <- a & b 
+#  start_pos <- i[a & b] 
+#  start_pos
+#  
+#  j <- which(c(pos_dna$dna =="T" & pos_dna$pos == 2))
+#  d <- dna[j+1] == "A"
+#  e <- dna[j+2] == "A"
+#  stop1_pos <- d & e
+#  stop1_pos <- j[d & e]
+#  stop1_pos
+#  
+#  jj <- which(c(pos_dna$dna =="T" & pos_dna$pos == 2))
+#  dd <- dna[jj+1] == "G"
+#  ee <- dna[jj+2] == "A"
+#  stop2_pos <- jj[dd & ee] 
+#  stop2_pos
+#  
+#  jjj <- which(c(pos_dna$dna =="T" & pos_dna$pos == 2))
+#  ddd <- dna[jjj+1] == "A"
+#  eee <- dna[jjj+2] == "G"
+#  stop3_pos <- jjj[ddd & eee] 
+#  stop3_pos
+#  
+#  start1 <- min(start_pos, na.rm=T)
+#  end1 <- min(stop1_pos, na.rm=T)
+#  end2 <- min(stop2_pos, na.rm=T)
+#  end3 <- min(stop3_pos, na.rm=T)
+#  
+#  seee <- c(start1, end1, end2, end3)
+#  seee[which(!is.finite(seee))] <- 0
+#  return(seee)
+#}
+```
+## Open Reading Frame 3
+Using the methods described above for open reading frame 1, we repeated this to find the start and stop codons for open reading frame 3. 
+```{r}
+#orf3 <- function(dna=dna, pos=pos_dna) {
+#  i <- which(c(pos_dna$dna =="A" & pos_dna$pos == 3))
+#  i
+#  a <- dna[i+1] == "T"#Look at the next door neighbor. Is next door neighbor T?
+#  b <- dna[i+2] == "G" #Is the next next door neighbor G?
+#  start_pos <- a & b #which of the A's are followed by T and G
+#  start_pos <- i[a & b] #Where in the DNA do the ATG's occur
+#  start_pos
+#  
+#  #This finds all the stops in ORF1
+#  j <- which(c(pos_dna$dna =="T" & pos_dna$pos == 3))
+#  d <- dna[j+1] == "A"
+#  e <- dna[j+2] == "A"
+#  stop1_pos <- d & e
+#  stop1_pos <- j[d & e]
+#  stop1_pos
+#  
+#  jj <- which(c(pos_dna$dna =="T" & pos_dna$pos == 3))
+#  dd <- dna[jj+1] == "G"
+#  ee <- dna[jj+2] == "A"
+#  stop2_pos <- jj[dd & ee] #Where in the DNA do the ATG's occur
+#  stop2_pos
+#  
+#  jjj <- which(c(pos_dna$dna =="T" & pos_dna$pos == 3))
+#  ddd <- dna[jjj+1] == "A"
+#  eee <- dna[jjj+2] == "G"
+#  stop3_pos <- jjj[ddd & eee] #Where in the DNA do the ATG's occur
+#  stop3_pos
+#  
+#  start1 <- min(start_pos, na.rm=T)
+#  end1 <- min(stop1_pos, na.rm=T)
+#  end2 <- min(stop2_pos, na.rm=T)
+#  end3 <- min(stop3_pos, na.rm=T)
+#  
+#  seee <- c(start1, end1, end2, end3)
+#  seee[which(!is.finite(seee))] <- 0
+#  return(seee)
+#}
+```
+# To Create Reverse DNA 
+To create the reverse DNA we access the same DNA string, but reverse the order. We then replace each nucleotide with its base pair. This creates revcomp, which will be used in the next 3 reading frames. We then assign a number to each nucleotide, 1,2, or 3, to separate the reverse DNA into the three reading frames.
+```{r}
+#reverse <- dna[500:1]
+#reverse
+#reverseT <- replace(reverse, reverse=="A", "T")
+#reverseA <- replace(reverseT, reverse=="T", "A")
+#reverseC <- replace(reverseA, reverse=="C", "G")
+#reverseG <- replace(reverseC, reverse=="G", "C")
+#revcomp <- reverseG
+#
+#pos_revcomp <- cbind(rep(c(1,2,3), 167))
+#pos_revcomp
+#pos_revcomp <- c(pos_revcomp[1:500])
+#pos_revcomp
+#length(pos_revcomp)
+#
+#pos_rc_dna <- data.frame(revcomp, pos_revcomp)
+#names(pos_rc_dna) <- c("dna", "pos")
+#head(pos_rc_dna)
+```
+
+# Reverse Reading Frames
+## Open Reading Frame 4
+Open reading frame 4 is the first of our reverse DNA. Using the methods described above for open reading frame 1, we repeated this to find the start and stop codons for open reading frame 4. 
+```{r}
+#orf4 <- function(dna=revcomp, pos=pos_rc_dna) {
+#  r <- which(c(pos_rc_dna$dna =="A" & pos_rc_dna$pos == 1))
+#  s <- revcomp[r+1] == "T"
+#  u <- revcomp[r+2] == "G"
+#  start_pos <- r[s & u]
+#  start_pos
+#  
+#  v <- which(c(pos_rc_dna$dna =="T" & pos_rc_dna$pos == 1))
+#  w <- revcomp[v+1] == "A"
+#  z <- revcomp[v+2] == "A" 
+#  stop1_pos <- v[w & z]
+#  stop1_pos
+#  
+#  vv <- which(c(pos_rc_dna$dna =="T" & pos_rc_dna$pos == 1))
+#  ww <- revcomp[vv+1] == "A"
+#  zz <- revcomp[vv+2] == "G" 
+#  stop2_pos <- vv[ww & zz]
+#  stop2_pos
+#  
+#  vvv <- which(c(pos_rc_dna$dna =="T" & pos_rc_dna$pos == 1))
+#  www <- revcomp[vvv+1] == "G"
+#  zzz <- revcomp[vvv+2] == "A" 
+#  stop3_pos <- vvv[www & zzz]
+#  stop3_pos
+#  
+#  start1 <- min(start_pos, na.rm=T)
+#  end1 <- min(stop1_pos, na.rm=T)
+#  end2 <- min(stop2_pos, na.rm=T)
+#  end3 <- min(stop3_pos, na.rm=T)
+#  
+#  seee <- c(start1, end1, end2, end3)
+#  seee[which(!is.finite(seee))] <- 0
+#  return(seee)
+#}
+```
+
+## Open Reading Frame 5
+Open reading frame 5 is also one of our reverse DNA. Using the methods described above for open reading frame 1, we repeated this to find the start and stop codons for open reading frame 5. 
+```{r}
+#orf5 <- function(dna=revcomp, pos=pos_rc_dna) {
+#  r <- which(c(pos_rc_dna$dna =="A" & pos_rc_dna$pos == 2))
+#  s <- revcomp[r+1] == "T"
+#  u <- revcomp[r+2] == "G"
+#  start_pos <- r[s & u]
+#  start_pos
+#  
+#  #This finds all the stops in ORF4
+#  v <- which(c(pos_rc_dna$dna =="T" & pos_rc_dna$pos == 2))
+#  w <- revcomp[v+1] == "A"
+#  z <- revcomp[v+2] == "A" 
+#  stop1_pos <- v[w & z]
+#  stop1_pos
+#  
+#  vv <- which(c(pos_rc_dna$dna =="T" & pos_rc_dna$pos == 2))
+#  ww <- revcomp[vv+1] == "A"
+#  zz <- revcomp[vv+2] == "G" 
+#  stop2_pos <- vv[ww & zz]
+#  stop2_pos
+#  
+#  vvv <- which(c(pos_rc_dna$dna =="T" & pos_rc_dna$pos == 2))
+#  www <- revcomp[vvv+1] == "G"
+#  zzz <- revcomp[vvv+2] == "A" 
+#  stop3_pos <- vvv[www & zzz]
+#  stop3_pos
+#  
+#  start1 <- min(start_pos, na.rm=T)
+#  end1 <- min(stop1_pos, na.rm=T)
+#  end2 <- min(stop2_pos, na.rm=T)
+#  end3 <- min(stop3_pos, na.rm=T)
+#  
+#  seee <- c(start1, end1, end2, end3)
+#  seee[which(!is.finite(seee))] <- 0
+#  return(seee)
+#}	
+```
+
+## Open Reading Frame 6
+Open reading frame 6 is our last reverse DNA. Using the methods described above for open reading frame 1, we repeated this to find the start and stop codons for open reading frame 6. 
+```{r}
+#orf6 <- function(dna=revcomp, pos=pos_rc_dna) {
+#  r <- which(c(pos_rc_dna$dna =="A" & pos_rc_dna$pos == 3))
+#  s <- revcomp[r+1] == "T"
+#  u <- revcomp[r+2] == "G"
+#  start_pos <- r[s & u]
+#  start_pos
+#  
+#  #This finds all the stops in ORF4
+#  v <- which(c(pos_rc_dna$dna =="T" & pos_rc_dna$pos == 3))
+#  w <- revcomp[v+1] == "A
+#  z <- revcomp[v+2] == "A" 
+#  stop1_pos <- v[w & z]
+#  stop1_pos
+#  
+#  vv <- which(c(pos_rc_dna$dna =="T" & pos_rc_dna$pos == 3))
+#  ww <- revcomp[vv+1] == "A"
+#  zz <- revcomp[vv+2] == "G" 
+#  stop2_pos <- vv[ww & zz]
+#  stop2_pos
+#  
+#  vvv <- which(c(pos_rc_dna$dna =="T" & pos_rc_dna$pos == 3))
+#  www <- revcomp[vvv+1] == "G"
+#  zzz <- revcomp[vvv+2] == "A" 
+#  stop3_pos <- vvv[www & zzz]
+#  stop3_pos
+#  
+#  start1 <- min(start_pos, na.rm=T)
+#  end1 <- min(stop1_pos, na.rm=T)
+#  end2 <- min(stop2_pos, na.rm=T)
+#  end3 <- min(stop3_pos, na.rm=T)
+#  
+#  seee <- c(start1, end1, end2, end3)
+#  seee[which(!is.finite(seee))] <- 0
+#  return(seee)
+#}
+```
+## Getting the Longest Sequence
+We now create three vectors that each represent a reading frame, and we combine these vectors into the reading frame. We create a function to source all of the 6 previously created reading frames and the revcomp file to form reverse DNA. For each reading frame cod1[1] is start, seeee[1] is stop 1, seeee[2] is stop 2, etc. We dictate for each start codon that if the stop codon(s) are found before it, do not do anything because DNA is not useful if it stops before it starts. We then say if the length of the sequences are 0 then ignore, but if they exist rename them as length and their reading frame number. This allows us to locate max length. From here, we can use cat to create text files with the start and stop codons identified, and the sequence on display. After this is done for all six reading frames, we have the function return the longest of all reading frames.
+
+```{r}
+openreadingframe <- function(orf=dna, pos=pos_dna) {
+	source("orf1.R")
+	source("orf2.R")
+	source("orf3.R")
+	source("revcomp.R")
+	source("orf4.R")
+	source("orf5.R")
+	source("orf6.R")
+
+	cod1 <- orf1(dna=dna, pos=pos_dna)
+	cod2 <- orf2(dna=dna, pos=pos_dna)
+	cod3 <- orf3(dna=dna, pos=pos_dna)
+	cod4 <- orf4(dna=revcomp, pos=pos_rc_dna)
+	cod5 <- orf5(dna=revcomp, pos=pos_rc_dna)
+	cod6 <- orf6(dna=revcomp, pos=pos_rc_dna)
+
+	#cod1[1] is start, seeee[1] is stop 1, seeee[2] is stop 2, etc.
+	stopoo <- c(cod1[2], cod1[3], cod1[4])
+	seeee <- sort(stopoo)
+	pos_stop1 <- if (seeee[1] < seeee[2] & seeee[2] < cod1[1] & seeee[3] < cod1[1]) {NULL} else if(seeee[1] < seeee[2] & seeee[2] < cod1[1]) {seeee[3]} else if (seeee[1] < cod1[1]) {seeee[2]} else {seeee[1]}
+
+	stopoo <- c(cod2[2], cod2[3], cod2[4])
+	seeee <- sort(stopoo)
+	pos_stop2 <- if (seeee[1] < seeee[2] & seeee[2] < cod2[1] & seeee[3] < cod2[1]) {NULL} else if(seeee[1] < seeee[2] & seeee[2] < cod2[1]) {seeee[3]} else if (seeee[1] < cod2[1]) {seeee[2]} else {seeee[1]}
+
+	stopoo <- c(cod3[2], cod3[3], cod3[4])
+	seeee <- sort(stopoo)
+	pos_stop3 <- if (seeee[1] < seeee[2] & seeee[2] < cod3[1] & seeee[3] < cod3[1]) {NULL} else if(seeee[1] < seeee[2] & seeee[2] < cod3[1]) {seeee[3]} else if (seeee[1] < cod3[1]) {seeee[2]} else {seeee[1]}
+
+
+	stopoo <- c(cod4[2], cod4[3], cod4[4])
+	seeee <- sort(stopoo)
+	pos_stop4 <- if (seeee[1] < seeee[2] & seeee[2] < cod4[1] & seeee[3] < cod4[1]) {NULL} else if(seeee[1] < seeee[2] & seeee[2] < cod4[1]) {seeee[3]} else if (seeee[1] < cod4[1]) {seeee[2]} else {seeee[1]}
+
+
+	stopoo <- c(cod5[2], cod5[3], cod5[4])
+	seeee <- sort(stopoo)
+	pos_stop5 <- if (seeee[1] < seeee[2] & seeee[2] < cod5[1] & seeee[3] < cod5[1]) {NULL} else if(seeee[1] < seeee[2] & seeee[2] < cod5[1]) {seeee[3]} else if (seeee[1] < cod5[1]) {seeee[2]} else {seeee[1]}
+
+
+	stopoo <- c(cod6[2], cod6[3], cod6[4])
+	seeee <- sort(stopoo)
+	pos_stop6 <- if (seeee[1] < seeee[2] & seeee[2] < cod6[1] & seeee[3] < cod6[1]) {NULL} else if(seeee[1] < seeee[2] & seeee[2] < cod6[1]) {seeee[3]} else if (seeee[1] < cod6[1]) {seeee[2]} else {seeee[1]}
+
+	
+
+	if (length(cod1[1]) == 0 | length(pos_stop1+2) == 0) {length1=0} else {length1 <- length(dna[cod1[1]:(pos_stop1+2)])}
+	if (length(cod2[1]) == 0 | length(pos_stop2+2) == 0) {length2=0} else {length2 <- length(dna[cod2[1]:(pos_stop2+2)])}
+	if (length(cod3[1]) == 0 | length(pos_stop3+2) == 0) {length3=0} else {length3 <- length(dna[cod3[1]:(pos_stop3+2)])}
+	if (length(cod4[1]) == 0 | length(pos_stop4+2) == 0) {length4=0} else {length4 <- length(dna[cod4[1]:(pos_stop4+2)])}
+	if (length(cod5[1]) == 0 | length(pos_stop5+2) == 0) {length5=0} else {length5 <- length(dna[cod5[1]:(pos_stop5+2)])}
+	if (length(cod6[1]) == 0 | length(pos_stop6+2) == 0) {length6=0} else {length6 <- length(dna[cod6[1]:(pos_stop6+2)])}
+	maxlength <- max(length1, length2, length3, length4, length5, length6)
+	
+	if (maxlength==length1) {longest <- dna[cod1[1]:(pos_stop1+2)]} else if (maxlength==length2) {longest <- dna[cod2[1]:(pos_stop2+2)]} else if (maxlength==length3) {longest <- dna[cod3[1]:(pos_stop3+2)]} else if (maxlength==length4) {longest <- revcomp[cod4[1]:(pos_stop4+2)]} else if (maxlength==length5) {longest <- revcomp[cod5[1]:(pos_stop5+2)]} else {longest <- revcomp[cod6[1]:(pos_stop6+2)]}
+	
+	if (length(cod1[1]) == 0 | length(pos_stop1+2) == 0) {pos1 <- "NONE"} else {pos1 <- dna[cod1[1]:(pos_stop1+2)]}
+	if (length(cod2[1]) == 0 | length(pos_stop2+2) == 0) {pos2 <- "NONE"} else {pos2 <- dna[cod2[1]:(pos_stop2+2)]}
+	if (length(cod3[1]) == 0 | length(pos_stop3+2) == 0) {pos3 <- "NONE"} else {pos3 <- dna[cod3[1]:(pos_stop3+2)]}
+	if (length(cod4[1]) == 0 | length(pos_stop4+2) == 0) {pos4 <- "NONE"} else {pos4 <- revcomp[cod4[1]:(pos_stop4+2)]}
+	if (length(cod5[1]) == 0 | length(pos_stop5+2) == 0) {pos5 <- "NONE"} else {pos5 <- revcomp[cod5[1]:(pos_stop5+2)]}
+	if (length(cod6[1]) == 0 | length(pos_stop6+2) == 0) {pos6 <- "NONE"} else {pos6 <- revcomp[cod6[1]:(pos_stop6+2)]}
+	
+	cat("ORF 1", file="output.txt", sep="\n")
+	cat(paste("Start:", cod1[1]), file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Stop:", pos_stop1), file="output.txt", append=TRUE, sep="\n")
+	cat("Sequence: ", file="output.txt", append=TRUE)
+	cat(pos1, file="output.txt", append=TRUE)
+	cat(" ", file="output.txt", append=TRUE, sep="\n")
+
+	
+	cat("ORF 2", file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Start:", cod2[1]), file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Stop:", pos_stop2), file="output.txt", append=TRUE, sep="\n")
+	cat("Sequence: ", file="output.txt", append=TRUE)
+	cat(pos2, file="output.txt", append=TRUE)
+	cat(" ", file="output.txt", append=TRUE, sep="\n")
+	
+	cat("ORF 3", file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Start:", cod3[1]), file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Stop:", pos_stop3), file="output.txt", append=TRUE, sep="\n")
+	cat("Sequence: ", file="output.txt", append=TRUE)
+	cat(pos3, file="output.txt", append=TRUE)
+	cat(" ", file="output.txt", append=TRUE, sep="\n")
+
+	cat("ORF 4", file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Start:", cod4[1]), file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Stop:", pos_stop4), file="output.txt", append=TRUE, sep="\n")
+	cat("Sequence: ", file="output.txt", append=TRUE)
+	cat(pos4, file="output.txt", append=TRUE)
+	cat(" ", file="output.txt", append=TRUE, sep="\n")
+	
+	cat("ORF 5", file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Start:", cod5[1]), file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Stop:", pos_stop5), file="output.txt", append=TRUE, sep="\n")
+	cat("Sequence: ", file="output.txt", append=TRUE)
+	cat(pos5, file="output.txt", append=TRUE)
+	cat(" ", file="output.txt", append=TRUE, sep="\n")
+	
+	cat("ORF 6", file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Start:", cod6[1]), file="output.txt", append=TRUE, sep="\n")
+	cat(paste("Stop:", pos_stop6), file="output.txt", append=TRUE, sep="\n")
+	cat("Sequence: ", file="output.txt", append=TRUE)
+	cat(pos6, file="output.txt", append=TRUE)
+	cat(" ", file="output.txt", append=TRUE, sep="\n")
+
+	return(cat(longest))
+
+}
+```
+
+Here is an example of the function working on the DNA input from the "sampleDNA.csv" sheet:
+```{r}
+openreadingframe(orf=dna, pos=pos_dna)
+read.delim("output.txt")
+```
+
+Here it is on another randomly generated DNA sequence of 500 base pairs:
+```{r}
+bps <- c("A", "G", "T", "C")
+dna <- sample(bps, 500, replace=T)
+dna
+
+pos <- cbind(rep(c(1,2,3), 167))
+pos <- c(pos[1:500])
+pos_dna <- data.frame(dna, pos)
+
+openreadingframe(orf=dna, pos=dna_pos)
+read.delim("output.txt")
+```
+
+Here is an example of it working on a sequence of 600 base pairs:
+```{r}
+bps <- c("A", "G", "T", "C")
+dna <- sample(bps, 600, replace=T)
+dna
+
+pos <- cbind(c(1,2,3))
+pos_dna <- data.frame(dna, pos)
+
+openreadingframe(orf=dna, pos=dna_pos)
+read.delim("output.txt")
+```
+
+
+Here is an example of it working on a sequence of 900 base pairs:
+```{r}
+bps <- c("A", "G", "T", "C")
+dna <- sample(bps, 900, replace=T)
+dna
+
+pos <- cbind(c(1,2,3))
+pos_dna <- data.frame(dna, pos)
+
+openreadingframe(orf=dna, pos=dna_pos)
+read.delim("output.txt")
+```
