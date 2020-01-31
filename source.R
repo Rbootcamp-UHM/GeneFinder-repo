@@ -1,3 +1,5 @@
+###THIS IS THE SCRIPT THAT ACTUALLY FINDS THE ORF'S###
+
 #setwd("C:/Users/hille/Documents/Rbootcamp_S2020/GeneFinder-repo")
 dna <- read.csv("sampleDNA.csv")
 dna <- as.vector(dna$Nucleotides)
